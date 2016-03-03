@@ -49,12 +49,12 @@ context 'viewing restaurants' do
 end
 
 context 'deleting restaurants' do
-  before {Restaurant.create name: 'KFC'}
 
   scenario 'removes a restaurant when a user clicks a delete link' do
     visit '/restaurants'
 
     sign_up
+    create_restaurant
 
     click_link 'Delete KFC'
     expect(page).not_to have_content 'KFC'
@@ -67,7 +67,7 @@ context 'an invalid restaurant' do
     visit '/restaurants'
 
     sign_up
-    
+
     click_link 'Add a restaurant'
     fill_in 'Name', with: 'kf'
     click_button 'Create Restaurant'

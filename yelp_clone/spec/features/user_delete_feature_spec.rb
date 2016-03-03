@@ -9,5 +9,6 @@ feature 'user deleting restaurant' do
     sign_up_other
     click_link 'Delete KFC'
     expect(page).not_to have_content 'deleted successfully'
+    expect(page).to have_content 'This is not your restaurant to delete'
   end
 end
