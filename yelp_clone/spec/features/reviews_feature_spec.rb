@@ -22,4 +22,14 @@ feature 'reviewing' do
     expect(page).not_to have_content('epic')
   end
 
+  scenario 'allows a review to be deleted' do
+    visit '/'
+    sign_up
+    create_restaurant
+    set_review
+    click_link 'Delete review'
+    expect(page).not_to have_content('so so')
+    expect(page).to have_content('The review has been deleted')
+  end
+
 end
