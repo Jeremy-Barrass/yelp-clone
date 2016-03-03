@@ -5,18 +5,21 @@ feature 'reviewing' do
 
   scenario 'allows users to leave a review using a form' do
      visit '/'
-
      sign_up
      create_restaurant
-     click_link 'Review KFC'
-     fill_in "Thoughts", with: "so so"
-     select '3', from: 'Rating'
-
-
-     click_button 'Leave Review'
-
+     set_review
      expect(current_path).to eq '/restaurants'
      expect(page).to have_content('so so')
+  end
+
+  scenario 'user can only leave one review per restaurant' do
+    visit '/'
+    sign_up
+    create_restaurant
+    set_review
+    another_review
+    expect(page).to have_content('You have already reviewed this restaurant')
+    expect(page).not_to have_content('epic')
   end
 
 end

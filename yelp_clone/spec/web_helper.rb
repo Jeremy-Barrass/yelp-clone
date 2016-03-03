@@ -19,3 +19,17 @@ def sign_up_other
   fill_in 'Password confirmation', with: 'password123'
   click_button 'Sign up'
 end
+
+def set_review
+  click_link 'Review KFC'
+  fill_in "Thoughts", with: "so so"
+  select '3', from: 'Rating'
+  click_button 'Leave Review'
+end
+
+def another_review
+  click_link 'Review KFC'
+  fill_in "Thoughts", with: "epic"
+  select '5', from: 'Rating'
+  click_button 'Leave Review'
+end
