@@ -1,4 +1,5 @@
+require 'rails_helper'
 
-describe 'User' do
-  it { is_expected.to have_many :reviewed_restaurants}
+describe User, type: :model do
+  it { is_expected.to have_many :reviewed_restaurants }
 end

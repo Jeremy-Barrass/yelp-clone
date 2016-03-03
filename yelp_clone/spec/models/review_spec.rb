@@ -6,6 +6,7 @@ describe Review, :type => :model do
     expect(review).to have(1).error_on(:rating)
   end
 
-  it { is_expected.to validate_uniqueness_of(:user).scoped_to(:restaurant) }
-  
+
+
+
 end
