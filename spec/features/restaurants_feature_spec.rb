@@ -25,6 +25,11 @@ feature 'restaurants' do
   end
 
   context 'creating restaurants' do
+
+    before do
+      sign_up
+    end
+
     scenario 'prompts user to fill out a form, then displays the new restaurant' do
       visit '/restaurants'
       click_link 'Add a restaurant'
@@ -44,12 +49,22 @@ feature 'restaurants' do
         expect(page).to have_content 'error'
       end
     end
+
+    context 'the user must be logged in to add a restaurant' do
+      scenario 'does not allow the user to create a restaurant if they are not logged in' do
+        sign_out
+        visit '/restaurants'
+        click_link 'Add a restaurant'
+        expect(page).not_to have_content 'Name'
+      end
+    end
   end
 
   context 'viewing restaurants' do
     let!(:kfc) {Restaurant.create(name: "KFC")}
 
     scenario 'lets a user view a restaurant' do
+      sign_up
       visit '/restaurants'
       click_link 'KFC'
       expect(page).to have_content 'KFC'
@@ -62,6 +77,7 @@ feature 'restaurants' do
     before { Restaurant.create name: 'KFC' }
 
     scenario 'let a user edit a restaurant' do
+      sign_up
       visit '/restaurants'
       click_link 'Edit KFC'
       fill_in 'Name', with: 'Kentucky Fried Chicken'
@@ -75,6 +91,7 @@ feature 'restaurants' do
     before {Restaurant.create(name: 'KFC')}
 
     scenario 'let a user delete a restaurant' do
+      sign_up
       visit '/restaurants'
       click_link 'Delete KFC'
       expect(page).not_to have_content('KFC')
