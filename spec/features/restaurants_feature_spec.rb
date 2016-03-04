@@ -112,4 +112,18 @@ feature 'reviewing' do
     expect(current_path).to eq '/restaurants'
     expect(page).to have_content('so, so')
   end
+
+  scenario 'does not allow a user to review the same restaurant more than once' do
+    visit '/restaurants'
+    click_link 'Review KFC'
+    fill_in "Thoughts", with: "Blargh!"
+    select "2", from: "Rating"
+    click_button 'Leave review'
+    expect(current_path).to eq '/restaurants'
+    click_link 'Review KFC'
+    fill_in "Thoughts", with: "Blargh! some more"
+    select "1", from: "Rating"
+    click_button 'Leave review'
+    expect(page).to have_content('You have already reviewed this restaurant')
+  end
 end
