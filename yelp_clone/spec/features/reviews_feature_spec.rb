@@ -32,4 +32,16 @@ feature 'reviewing' do
     expect(page).to have_content('The review has been deleted')
   end
 
+  scenario 'allows a review to be deleted by the creator only' do
+    visit '/'
+    sign_up
+    create_restaurant
+    set_review
+    click_link 'Sign out'
+    sign_up_other
+    click_link 'Delete review'
+    expect(page).to have_content('so so')
+    expect(page).to have_content('The review can only be deleted by its creator')
+  end
+
 end
