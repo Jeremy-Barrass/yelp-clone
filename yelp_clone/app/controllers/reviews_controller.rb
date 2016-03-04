@@ -1,5 +1,8 @@
 class ReviewsController < ApplicationController
   include WithUserAssociationExtension
+  before_action :authenticate_user!, :except => [:index, :show]
+
+
   def new
 
     if current_user.has_reviewed? @restaurant
