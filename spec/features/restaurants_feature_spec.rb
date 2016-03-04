@@ -88,14 +88,26 @@ feature 'restaurants' do
   end
 
   context 'deleting restaurants' do
-    before {Restaurant.create(name: 'KFC')}
-
     scenario 'let a user delete a restaurant' do
       sign_up
-      visit '/restaurants'
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'KFC'
+      click_button 'Create Restaurant'
       click_link 'Delete KFC'
       expect(page).not_to have_content('KFC')
       expect(page).to have_content('Restaurant deleted successfully')
+    end
+
+    scenario 'only allows a creating user to delete a restaurant' do
+      sign_up
+      click_link 'Add a restaurant'
+      fill_in 'Name', with: 'EAT'
+      click_button 'Create Restaurant'
+      sign_out
+      sign_up(email: 'deletion@byebye.com')
+      click_link 'Delete EAT'
+      expect(page).to have_content('EAT')
+      expect(page).to have_content('Only the creating user can delete this restaurant.')
     end
   end
 end
@@ -104,7 +116,7 @@ feature 'reviewing' do
   before {Restaurant.create(name: 'KFC')}
 
   scenario 'allows users to leave a review using a form' do
-    visit '/restaurants'
+    sign_up
     click_link 'Review KFC'
     fill_in "Thoughts", with: "so, so"
     select "3", from: "Rating"
@@ -114,7 +126,7 @@ feature 'reviewing' do
   end
 
   scenario 'does not allow a user to review the same restaurant more than once' do
-    visit '/restaurants'
+    sign_up
     click_link 'Review KFC'
     fill_in "Thoughts", with: "Blargh!"
     select "2", from: "Rating"
@@ -126,4 +138,16 @@ feature 'reviewing' do
     click_button 'Leave review'
     expect(page).to have_content('You have already reviewed this restaurant')
   end
+
+  scenario 'allows users to delete reviews' do
+    sign_up
+    click_link 'Review KFC'
+    fill_in "Thoughts", with: "so, so"
+    select "3", from: "Rating"
+    click_button 'Leave review'
+    click_link 'Delete review'
+    expect(page).not_to have_content('so, so')
+    expect(page).to have_content('review successfully deleted')
+  end
+
 end
