@@ -12,6 +12,8 @@
         <% restaurant.reviews.each do |review| %>
           <li>
             <%= review.thoughts %>, <strong><%= review.rating %></strong>/5
+            <p><%= pluralize review.endorsements.count, 'endorsement' %></p>
+            <%= link_to "Endorse Review", review_endorsements_path(review), method: :post %>
             <%= link_to "Delete review", review_path(review), method: :delete %>
           </li>
         <% end %>
