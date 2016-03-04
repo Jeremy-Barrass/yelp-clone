@@ -150,4 +150,17 @@ feature 'reviewing' do
     expect(page).to have_content('review successfully deleted')
   end
 
+  scenario 'only the creating user can delete reviews' do
+    sign_up
+    click_link 'Review KFC'
+    fill_in "Thoughts", with: "so, so"
+    select "3", from: "Rating"
+    click_button 'Leave review'
+    sign_out
+    sign_up(email: 'deletion@byebye.com')
+    click_link 'Delete review'
+    expect(page).to have_content('so, so')
+    expect(page).to have_content('Only the creating user can delete this review.')
+  end
+
 end
